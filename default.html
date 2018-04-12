@@ -60,7 +60,65 @@
 
 	</style>
 	<script>
-		var ftc_slider = {};
+		var ftc_slider = {
+			slideMove(sliderID, direction, count = 1) {
+			console.log("ftc_slide trigger");
+			console.log("count: " + count);
+
+			let theSlider = $("#" + sliderID + " .slider");
+			let sliderDetails = eval('ftc_slider.' + sliderID + '.details' );
+			let slideWidth = sliderDetails.slideWidth;
+			let currentOffset = parseInt(theSlider.css("left"));
+			if (currentOffset < 0){ currentOffset = -currentOffset}
+			let maxOffset = sliderDetails.maxOffset;
+			let slideDirection = "-=";
+			let moveSize = slideWidth * count;
+			let offsetDiff = maxOffset - currentOffset;
+
+
+			ftc_slider.clickable = false;
+			if (direction === "left") {
+				console.log("left direction");  
+				//slideDirection = "-=";
+				console.log("currentOffset: " + currentOffset);
+
+			    if (offsetDiff <= moveSize) {
+			    	console.log("reached the end - moving slides")
+			    	for (let i = 0; i < count; i++) {
+			    		let slideToMove = $("#" + sliderID + " .slider .slide:first-child");
+			    		// might need to use .detach for jquery mobile
+						slideToMove.appendTo(theSlider);
+			    		theSlider.css("left", "+=" + slideWidth);
+			    	}
+				}
+			}
+			if (direction === "right") { 
+				slideDirection = "+=";
+				console.log("currentOffset: " + currentOffset);
+				if (currentOffset <= moveSize) {
+					for (let i = 0; i < count; i++) {
+						console.log("moving slide order");
+						let slideToMove = $("#" + sliderID + " .slider .slide:last-child");
+						slideToMove.prependTo(theSlider);
+						theSlider.css("left", "-=" + slideWidth)
+					}
+				}
+			}
+			//console.log("maxOffset: " + maxOffset);
+
+			theSlider.animate({
+			    left: slideDirection + (slideWidth * count)
+			  }, 800, function() {
+			    // Animation complete.
+			    ftc_slider.clickable = true;
+			    //console.log("slide right");
+			    console.log("post slide currentOffset: " + currentOffset);
+
+			  });
+			}
+			
+		};
+
 		$( document ).ready(function() {
 			
 			ftc_slider.sliderUnit = $(".slider-container");
@@ -72,7 +130,7 @@
 				
 				sliderDetails.slider.width(sliderDetails.numberOfSlides * sliderDetails.slideWidth);
 				sliderDetails.slider.children(".slide").width(sliderDetails.slideWidth);
-				console.log("slides count: " + sliderDetails.numberOfSlides);
+				//disable slider navigation if only 1 slide
 				if (sliderDetails.numberOfSlides < 2) {
 					$("#" + sliderunitID + " .slider-nav").hide();
 				}
@@ -83,14 +141,14 @@
 			
 			
 			if(ftc_slider.sliderUnit.children().length > 0) {
-				console.log("found sliders");
+				console.log("found ftc sliders");
 				ftc_slider.clickable = true;
 			}
 
 			$(".slider-container .slider .slide:first-child").addClass("active-slide");
 
 			$(window).resize(function(){
-				console.log("resized");
+				//console.log("resized");
 				slidew = ftc_slider.sliderUnit.width();
 				ftc_slider.sliderUnit.each(function(){
 					let sliderunitID = $(this).attr("id");
@@ -120,21 +178,24 @@
 					let sliderDetails = eval('ftc_slider.' + sliderID + '.details' );
 					let slideWidth = sliderDetails.slideWidth; //parseInt($("#" + sliderID + " .slider .slide").width());
 					//console.log("slideWidth: " + slideWidth);
-
+					
 					if (sliderDetails.numberOfSlides > 1 ) {
 						let currentOffset = parseInt(theSlider.css("left"));
 						let maxOffset = sliderDetails.maxOffset;
 						console.log("maxOffset: " + maxOffset);
 						if (currentOffset < 0){ currentOffset = -currentOffset}
-						let currentSlide = (currentOffset / slideWidth) + 1;
+						let currentSlide = (currentOffset / slideWidth) + 1; // this logic is wrong
+						console.log("currentSlide: " + currentSlide);
+
 						let targetSlide = currentSlide + 1;
-				
+					
 					if ( $(this).hasClass("prev") ) {
 						console.log("prev trigger");
-						
+						ftc_slider.slideMove(sliderID, "right");
 						//targetSlide = currentSlide - 1;
 						//let targetOffset = targetSlide - currentSlide;
 						//console.log("Current Slide: " + currentSlide);
+						/*
 						if (currentOffset === 0) {
 							console.log("moving slide order");
 							let slideToMove = $("#" + sliderID + " .slider .slide:last-child");
@@ -153,20 +214,27 @@
 						    console.log("slide left done");
 					    	ftc_slider.clickable = true;
 					    	console.log(ftc_slider.clickable);
-						  });
+						  });*/
 					} else if ( $(this).hasClass("direct-nav") ) {
 							console.log("direct-nav trigger");				
 						 	targetSlide = $(this).attr("data-target");
-						//console.log("targetSlide: " + targetSlide);
+
+						 	//targetSlide2 = Array.from( theSlider.children() ).find( function(mySlides){ mySlides.attr("data-target") == targetSlide } );
+
+						 	//$(".slider-container .slider > .slide").findIndex(return function(x) x.attr("data-target") == targetSlide);
+							//console.log("targetSlide2: " + targetSlide2);
 						if (targetSlide > currentSlide) {
 							//console.log("Slide Right");
 							let targetOffset = targetSlide - currentSlide;
-							//let targetPos = 
-							
+
 							console.log("targetOffset: " + targetOffset);
-							//console.log("targetPos: " + targetPos);
 							console.log("currentOffset: " + currentOffset);
 
+							ftc_slider.slideMove(sliderID, "left", targetOffset);
+							
+							//console.log("targetPos: " + targetPos);
+							
+							/*
 							$(".slider-container .slider .slide").removeClass("active-slide");
 							theSlider.children('[data-slideid="' + targetSlide + '"]').addClass("active-slide");
 							ftc_slider.clickable = false;
@@ -181,16 +249,16 @@
 						    // might need to use .detach for jquery mobile
 		  					//oldSlide.appendTo(theSlider);
 						    //theSlider.css("left", "0px");
-
-						  });
+							
+						  });*/
 						} else if ( currentSlide > targetSlide ) {
 							//console.log("next trigger");
 							//console.log("Slide Left");
 							let targetOffset = currentSlide - targetSlide;
 							//console.log("targetOffset: " + targetOffset);
 							//console.log(targetOffset * slideWidth);
-
-							ftc_slider.clickable = false;
+							ftc_slider.slideMove(sliderID, "right", targetOffset);
+							/*ftc_slider.clickable = false;
 							theSlider.animate({
 						    	left: "+=" + targetOffset * slideWidth 
 						  	}, 1000, function() {
@@ -198,11 +266,13 @@
 						  		ftc_slider.clickable = true;
 
 
-						  	});
+						  	});*/
 						}
-
+			
 					} else {
-						console.log("next trigger");
+						console.log("next trigger")
+						ftc_slider.slideMove(sliderID, "left");
+						/*console.log("next trigger");
 						ftc_slider.clickable = false;
 
 						console.log("currentOffset: " + currentOffset);
@@ -224,7 +294,7 @@
 						    ftc_slider.clickable = true;
 						    //console.log("slide right");
 
-						  });
+						  });*/
 					}
 				}
 			} 
@@ -239,25 +309,26 @@
         			
         			if (ftc_slider.clickable == true) {
 
-	        			console.log(direction);
+	        			console.log("Swipe direction:" + direction);
 	        			let sliderID = $(this).attr("id");
-	        			console.log(sliderID);
+	        			console.log("Swipe sliderID:" + sliderID);
 						let theSlider = $("#" + sliderID + " .slider");
 						let sliderDetails = eval('ftc_slider.' + sliderID + '.details' );
 						let slideWidth = sliderDetails.slideWidth; //parseInt($("#" + sliderID + " .slider .slide").width());
 						//console.log("slideWidth: " + slideWidth);
 
 						if (sliderDetails.numberOfSlides > 1 ) {
-							let currentOffset = parseInt(theSlider.css("left"));
+							/*let currentOffset = parseInt(theSlider.css("left"));
 							let maxOffset = sliderDetails.maxOffset;
-							console.log("maxOffset: " + maxOffset);
+							//console.log("maxOffset: " + maxOffset);
 							if (currentOffset < 0){ currentOffset = -currentOffset}
 							let currentSlide = (currentOffset / slideWidth) + 1;
 							let targetSlide = currentSlide + 1;
-
+							*/
 		        			if (direction == "left") {
 		        				console.log("swipe left");
-								ftc_slider.clickable = false;
+		        				ftc_slider.slideMove(sliderID, "left");
+								/*ftc_slider.clickable = false;
 
 								console.log("currentOffset: " + currentOffset);
 								let offsetDiff = maxOffset - currentOffset;
@@ -280,7 +351,7 @@
 								    ftc_slider.clickable = true;
 								    //console.log("slide right");
 
-								  });
+								  });*/
 
 		        			}
 		        			if (direction == "right") {
@@ -288,18 +359,16 @@
 		        				console.log("swipe right");
 								ftc_slider.clickable = false;
 							
-							if (currentOffset === 0) {
-								console.log("moving slide order");
-								let slideToMove = $("#" + sliderID + " .slider .slide:last-child");
-								slideToMove.prependTo(theSlider);
-								theSlider.css("left", "-=" + slideWidth)
-							}
+								if (currentOffset === 0) {
+									console.log("moving slide order");
+									let slideToMove = $("#" + sliderID + " .slider .slide:last-child");
+									slideToMove.prependTo(theSlider);
+									theSlider.css("left", "-=" + slideWidth)
+								}
 							
-							
-						
-							ftc_slider.clickable = false;
-							console.log(ftc_slider.clickable);
-							theSlider.animate({
+								ftc_slider.clickable = false;
+								console.log(ftc_slider.clickable);
+								theSlider.animate({
 							    left: "+=" + slideWidth
 							  }, 500, function() {
 							    // Animation complete.
@@ -312,39 +381,66 @@
 	        		}
         		},
         		//Default is 75px, set to 0 for demo so any distance triggers swipe
-     			threshold:0
+     			threshold: 70
 
 			}); //end swipe controls
 
-		// Slide on timer
-		function slideNext(sliderID) {
-			console.log("next trigger");
+		/* Main Slide Function
+		function ftc_slide(sliderID, direction, count = 1) {
+			console.log("ftc_slide trigger");
+			console.log(count);
+
 			let theSlider = $("#" + sliderID + " .slider");
 			let sliderDetails = eval('ftc_slider.' + sliderID + '.details' );
 			let slideWidth = sliderDetails.slideWidth;
 			let currentOffset = parseInt(theSlider.css("left"));
+			if (currentOffset < 0){ currentOffset = -currentOffset}
 			let maxOffset = sliderDetails.maxOffset;
+			let slideDirection = "-=";
 
 			ftc_slider.clickable = false;
-			   
-		    if (currentOffset === maxOffset) {
-		    	console.log("reached the end - moving slides")
-		    	let slideToMove = $("#" + sliderID + " .slider .slide:first-child");
-		    	// might need to use .detach for jquery mobile
+			if (direction === "left") {
+				console.log("left direction");  
+				//slideDirection = "-=";
+				console.log("currentOffset: " + currentOffset);
+			    if (currentOffset === maxOffset) {
+			    	console.log("reached the end - moving slides")
+			    	let slideToMove = $("#" + sliderID + " .slider .slide:first-child");
+			    	// might need to use .detach for jquery mobile
 					slideToMove.appendTo(theSlider);
-		    	theSlider.css("left", "+=" + slideWidth);
+			    	theSlider.css("left", "+=" + slideWidth);
+				}
 			}
-			console.log("maxOffset: " + maxOffset);
+			if (direction === "right") { 
+				slideDirection = "+=";
+				console.log("currentOffset: " + currentOffset);
+				if (currentOffset === 0) {
+					console.log("moving slide order");
+					let slideToMove = $("#" + sliderID + " .slider .slide:last-child");
+					slideToMove.prependTo(theSlider);
+					theSlider.css("left", "-=" + slideWidth)
+				}
+			}
+			//console.log("maxOffset: " + maxOffset);
 
 			theSlider.animate({
-			    left: "-=" + slideWidth
+			    left: slideDirection + (slideWidth * count)
 			  }, 800, function() {
 			    // Animation complete.
 			    ftc_slider.clickable = true;
 			    //console.log("slide right");
+			    console.log("post slide currentOffset: " + currentOffset);
 
 			  });
 		}
+
+		// Direct Slide Function
+
+		function ftc_directSlide(sliderID,direction,count) {
+			// 
+		}*/
+
+		// auto slide timer
 
 		});
 	</script>
