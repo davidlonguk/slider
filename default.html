@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Responsive Slider</title>
+	<script src="jquery-3.1.1.min.js"></script>
+	<script src="jquery.touchSwipe.min.js"></script>
+	<style>
+		body {
+			font-family: verdana;
+		}
+		#wrapper {
+			width: 100%;
+			max-width: 1000px;
+			margin: 0 auto;
+		}
+		.slider-container {
+			width: 100%;
+			height: 400px;
+			overflow: hidden;
+			border: 1px solid navy;
+			position: relative;
+		}
+		.slider {
+			position: absolute;
+			left: 0;
+			top: 0;
+			height: 400px;
+			width: 3600px;
+		}
+		.slide {
+			width: 900px;
+			height: 400px;
+			float: left;
+			background: #fc0;
+			text-align: center;
+		}
+		
+		.slider-nav {
+			display: block;
+			position: absolute;
+			bottom: 20px;
+			left: 50%;
+			transform:	translateX(-50%);
+			z-index: 10;
+		}
+		.slider-nav a {
+			color: white;
+			font-weight: bold;
+			text-shadow: 1px 1px 2px black;
+		}
+		@media screen and (max-width: 768px) {
+			.slider-container, .slide {
+				height: 300px;
+			}
+			.slider-nav {
+				display: none;
+			}
+		}
+
+	</style>
+	<script>
+		var ftc_slider = {};
+		$( document ).ready(function() {
+			
+			ftc_slider.sliderUnit = $(".slider-container");
+			ftc_slider.sliderUnit.each(function(){
+				let sliderunitID = $(this).attr("id");
+				thisSlider = eval('ftc_slider.' + sliderunitID + '= {};');
+				thisSlider.details = getSliderUnit($(this));
+				sliderDetails = thisSlider.details;
+				
+				sliderDetails.slider.width(sliderDetails.numberOfSlides * sliderDetails.slideWidth);
+				sliderDetails.slider.children(".slide").width(sliderDetails.slideWidth);
+				console.log("slides count: " + sliderDetails.numberOfSlides);
+				if (sliderDetails.numberOfSlides < 2) {
+					$("#" + sliderunitID + " .slider-nav").hide();
+				}
+				
+			});
+			
+			//console.log(ftc_slider.slider_1234.details.numberOfSlides);
+			
+			
+			if(ftc_slider.sliderUnit.children().length > 0) {
+				console.log("found sliders");
+				ftc_slider.clickable = true;
+			}
+
+			$(".slider-container .slider .slide:first-child").addClass("active-slide");
+
+			$(window).resize(function(){
+				console.log("resized");
+				slidew = ftc_slider.sliderUnit.width();
+				ftc_slider.sliderUnit.each(function(){
+					let sliderunitID = $(this).attr("id");
+					thisSlider = eval('ftc_slider.' + sliderunitID + '= {};');
+					thisSlider.details = getSliderUnit($(this));
+					sliderDetails = thisSlider.details;
+					sliderDetails.slider.width(sliderDetails.numberOfSlides * sliderDetails.slideWidth);
+					sliderDetails.slider.children(".slide").width(sliderDetails.slideWidth);
+				});
+			});
+
+			function getSliderUnit(theSliderunit){
+				let sliderObj = {};
+					sliderObj.slider = theSliderunit.children(".slider");
+					sliderObj.numberOfSlides = sliderObj.slider.children(".slide").length;
+					sliderObj.slideWidth = ftc_slider.sliderUnit.width();
+					sliderObj.maxOffset = sliderObj.slideWidth * (sliderObj.numberOfSlides - 1);
+
+				return sliderObj;
+			}
+			//console.log(ftc_slider.clickable);
+			$('.slider-container .slider-nav a').click(function(e){
+				e.preventDefault();
+				if (ftc_slider.clickable == true) {
+					let sliderID = $(this).attr("data-sliderid");
+					let theSlider = $("#" + sliderID + " .slider");
+					let sliderDetails = eval('ftc_slider.' + sliderID + '.details' );
+					let slideWidth = sliderDetails.slideWidth; //parseInt($("#" + sliderID + " .slider .slide").width());
+					//console.log("slideWidth: " + slideWidth);
+
+					if (sliderDetails.numberOfSlides > 1 ) {
+						let currentOffset = parseInt(theSlider.css("left"));
+						let maxOffset = sliderDetails.maxOffset;
+						console.log("maxOffset: " + maxOffset);
+						if (currentOffset < 0){ currentOffset = -currentOffset}
+						let currentSlide = (currentOffset / slideWidth) + 1;
+						let targetSlide = currentSlide + 1;
+				
+					if ( $(this).hasClass("prev") ) {
+						console.log("prev trigger");
+						
+						//targetSlide = currentSlide - 1;
+						//let targetOffset = targetSlide - currentSlide;
+						//console.log("Current Slide: " + currentSlide);
+						if (currentOffset === 0) {
+							console.log("moving slide order");
+							let slideToMove = $("#" + sliderID + " .slider .slide:last-child");
+							slideToMove.prependTo(theSlider);
+							theSlider.css("left", "-=" + slideWidth)
+						}
+						//console.log("slideWidth: " + slideWidth);
+						
+						//;
+						ftc_slider.clickable = false;
+						console.log(ftc_slider.clickable);
+						theSlider.animate({
+						    left: "+=" + slideWidth
+						  }, 1000, function() {
+						    // Animation complete.
+						    console.log("slide left done");
+					    	ftc_slider.clickable = true;
+					    	console.log(ftc_slider.clickable);
+						  });
+					} else if ( $(this).hasClass("direct-nav") ) {
+							console.log("direct-nav trigger");				
+						 	targetSlide = $(this).attr("data-target");
+						//console.log("targetSlide: " + targetSlide);
+						if (targetSlide > currentSlide) {
+							//console.log("Slide Right");
+							let targetOffset = targetSlide - currentSlide;
+							//let targetPos = 
+							
+							console.log("targetOffset: " + targetOffset);
+							//console.log("targetPos: " + targetPos);
+							console.log("currentOffset: " + currentOffset);
+
+							$(".slider-container .slider .slide").removeClass("active-slide");
+							theSlider.children('[data-slideid="' + targetSlide + '"]').addClass("active-slide");
+							ftc_slider.clickable = false;
+							theSlider.animate({
+						    	left: "-=" + targetOffset * slideWidth 
+						  	}, 1000, function() {
+						    // Animation complete.
+						    ftc_slider.clickable = true;
+						    //console.log("slide right");
+
+						    //let oldSlide = $("#" + sliderID + " .slider .slide:first-child");
+						    // might need to use .detach for jquery mobile
+		  					//oldSlide.appendTo(theSlider);
+						    //theSlider.css("left", "0px");
+
+						  });
+						} else if ( currentSlide > targetSlide ) {
+							//console.log("next trigger");
+							//console.log("Slide Left");
+							let targetOffset = currentSlide - targetSlide;
+							//console.log("targetOffset: " + targetOffset);
+							//console.log(targetOffset * slideWidth);
+
+							ftc_slider.clickable = false;
+							theSlider.animate({
+						    	left: "+=" + targetOffset * slideWidth 
+						  	}, 1000, function() {
+						  		// complete
+						  		ftc_slider.clickable = true;
+
+
+						  	});
+						}
+
+					} else {
+						console.log("next trigger");
+						ftc_slider.clickable = false;
+
+						console.log("currentOffset: " + currentOffset);
+						
+						   
+					    if (currentOffset === maxOffset) {
+					    	console.log("reached the end - moving slides")
+					    	let slideToMove = $("#" + sliderID + " .slider .slide:first-child");
+					    	// might need to use .detach for jquery mobile
+	  						slideToMove.appendTo(theSlider);
+					    	theSlider.css("left", "+=" + slideWidth);
+						}
+						console.log("maxOffset: " + maxOffset);
+
+						theSlider.animate({
+						    left: "-=" + slideWidth
+						  }, 1000, function() {
+						    // Animation complete.
+						    ftc_slider.clickable = true;
+						    //console.log("slide right");
+
+						  });
+					}
+				}
+			} 
+
+		});
+
+
+			// touch swipe 
+			$('.slider-container').swipe({
+				//Generic swipe handler for all directions
+        		swipe:function(event, direction, distance, duration, fingerCount, fingerData) {
+        			
+        			if (ftc_slider.clickable == true) {
+
+	        			console.log(direction);
+	        			let sliderID = $(this).attr("id");
+	        			console.log(sliderID);
+						let theSlider = $("#" + sliderID + " .slider");
+						let sliderDetails = eval('ftc_slider.' + sliderID + '.details' );
+						let slideWidth = sliderDetails.slideWidth; //parseInt($("#" + sliderID + " .slider .slide").width());
+						//console.log("slideWidth: " + slideWidth);
+
+						if (sliderDetails.numberOfSlides > 1 ) {
+							let currentOffset = parseInt(theSlider.css("left"));
+							let maxOffset = sliderDetails.maxOffset;
+							console.log("maxOffset: " + maxOffset);
+							if (currentOffset < 0){ currentOffset = -currentOffset}
+							let currentSlide = (currentOffset / slideWidth) + 1;
+							let targetSlide = currentSlide + 1;
+
+		        			if (direction == "left") {
+		        				console.log("swipe left");
+								ftc_slider.clickable = false;
+
+								console.log("currentOffset: " + currentOffset);
+								let offsetDiff = maxOffset - currentOffset;
+								offsetDiff = -offsetDiff>0 ? -offsetDiff : offsetDiff;
+								console.log( "offset diff: " + offsetDiff );
+
+							    if ( offsetDiff  < slideWidth ) {
+							    	console.log("reached the end - moving slides")
+							    	let slideToMove = $("#" + sliderID + " .slider .slide:first-child");
+							    	// might need to use .detach for jquery mobile
+			  						slideToMove.appendTo(theSlider);
+							    	theSlider.css("left", "+=" + slideWidth);
+								}
+								console.log("maxOffset: " + maxOffset);
+
+								theSlider.animate({
+								    left: "-=" + slideWidth
+								  }, 500, function() {
+								    // Animation complete.
+								    ftc_slider.clickable = true;
+								    //console.log("slide right");
+
+								  });
+
+		        			}
+		        			if (direction == "right") {
+
+		        				console.log("swipe right");
+								ftc_slider.clickable = false;
+							
+							if (currentOffset === 0) {
+								console.log("moving slide order");
+								let slideToMove = $("#" + sliderID + " .slider .slide:last-child");
+								slideToMove.prependTo(theSlider);
+								theSlider.css("left", "-=" + slideWidth)
+							}
+							
+							
+						
+							ftc_slider.clickable = false;
+							console.log(ftc_slider.clickable);
+							theSlider.animate({
+							    left: "+=" + slideWidth
+							  }, 500, function() {
+							    // Animation complete.
+							    console.log("slide left done");
+						    	ftc_slider.clickable = true;
+						    	console.log(ftc_slider.clickable);
+							  });
+							}
+	        			}
+	        		}
+        		},
+        		//Default is 75px, set to 0 for demo so any distance triggers swipe
+     			threshold:0
+
+			}); //end swipe controls
+
+		// Slide on timer
+		function slideNext(sliderID) {
+			console.log("next trigger");
+			let theSlider = $("#" + sliderID + " .slider");
+			let sliderDetails = eval('ftc_slider.' + sliderID + '.details' );
+			let slideWidth = sliderDetails.slideWidth;
+			let currentOffset = parseInt(theSlider.css("left"));
+			let maxOffset = sliderDetails.maxOffset;
+
+			ftc_slider.clickable = false;
+			   
+		    if (currentOffset === maxOffset) {
+		    	console.log("reached the end - moving slides")
+		    	let slideToMove = $("#" + sliderID + " .slider .slide:first-child");
+		    	// might need to use .detach for jquery mobile
+					slideToMove.appendTo(theSlider);
+		    	theSlider.css("left", "+=" + slideWidth);
+			}
+			console.log("maxOffset: " + maxOffset);
+
+			theSlider.animate({
+			    left: "-=" + slideWidth
+			  }, 800, function() {
+			    // Animation complete.
+			    ftc_slider.clickable = true;
+			    //console.log("slide right");
+
+			  });
+		}
+
+		});
+	</script>
+</head>
+<body>
+
+
+<div id="wrapper">
+<h1>Carousel/Slider</h1>
+	<h2>Slide 1 - infinite loop sequential slide</h2>
+	<div id="slider_1234" class="slider-container">
+		<div class="slider">
+			<div class="slide" data-slideid="1" style="background-color: #fc0;">
+				<h2>Slide 1</h2>
+			</div>
+			<div class="slide" data-slideid="2" style="background-color: #0cf;">
+				<h2>Slide 2</h2>
+			</div>
+			<div class="slide" data-slideid="3" style="background-color: #f00;">
+				<h2>Slide 3</h2>
+			</div>
+			<div class="slide" data-slideid="4" style="background-color: #ef0;">
+				<h2>Slide 4</h2>
+			</div>
+
+		</div>
+		<nav class="slider-nav">
+			<a href="#" class="prev" data-sliderid="slider_1234">Prev</a>
+			<a href="#" class="next" data-sliderid="slider_1234">Next</a>
+		</nav>
+	</div>
+	<h2>Slider 2 - direct slide nav</h2>
+	<div id="slider_1235" class="slider-container">
+		<div class="slider">
+			<div class="slide" data-slideid="1" style="background-color: #fc0;">
+				<h2>Slide 1</h2>
+			</div>
+			<div class="slide" data-slideid="2" style="background-color: #0cf;">
+				<h2>Slide 2</h2>
+			</div>
+			<div class="slide" data-slideid="3" style="background-color: #f00;">
+				<h2>Slide 3</h2>
+			</div>
+			<div class="slide" data-slideid="4" style="background-color: #ef0;">
+				<h2>Slide 4</h2>
+			</div>
+
+		</div>
+		<nav class="slider-nav">
+			<!--<a href="#" class="prev" data-sliderid="slider_1235">Prev</a>-->
+			
+			<a href="#" class="direct-nav" data-target="1" data-sliderid="slider_1235">1</a>
+			<a href="#" class="direct-nav" data-target="2" data-sliderid="slider_1235">2</a>
+			<a href="#" class="direct-nav" data-target="3" data-sliderid="slider_1235">3</a>
+			<a href="#" class="direct-nav" data-target="4" data-sliderid="slider_1235">4</a>
+
+			<!-- <a href="#" class="next" data-sliderid="slider_1235">Next</a> -->
+		</nav>
+	</div>
+	<h2>Slider 3 - single slide only - no sliding</h2>
+	<div id="slider_1236" class="slider-container">
+		<div class="slider">
+			<div class="slide" data-slideid="2" style="background-color: #0cf;">
+				<h2>Only Slide</h2>
+			</div>
+		</div>
+		<nav class="slider-nav">
+			<a href="#" class="prev" data-sliderid="slider_1236">Prev</a>
+			<a href="#" class="next" data-sliderid="slider_1236">Next</a>
+		</nav>
+	</div>
+	<h2>Slider features</h2>
+	<ul>
+		<li>Infinite scrolling</li>
+		<li>Responsive - Fully responsive. Scales with its container. 
+		 Fits all screensizes and can be used full width or in a column/box</li>
+		<li>2 navigation options - sequencial and direct</li>
+		<li>Support for multiple sliders on one page</li>
+		<li>Support for any html content including images, video, text, links and combination</li>
+		<li>Supports thumbnail navigation</li>
+		<li>Mobile swipe and touch support</li>
+		<li>Behaves as static hero when only 1 slide</li>
+	</ul>
+	<h3>Features still being worked on</h3>
+	<ul>
+		<li>Combined sequential and direct navigation on single slider</li>
+		<li>Auto-slider on timer</li>
+		<li>auto-thumbnail generation for photo slider</li>
+		<li>General Styling</li>
+		<li>Refactoring</li>
+	</ul>
+</div>
+
+</body>
+</html>
