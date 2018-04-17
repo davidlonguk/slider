@@ -153,7 +153,7 @@
 			opacity: 1;
 		}
 		.slider-container .slider-nav {
-			width: 30px;
+			width: 50px;
 			z-index: 3;
 			display: block;
 		}
@@ -165,11 +165,13 @@
 	    }
 
 	    .slider-container a.slider-nav.prev {
-	    	left: 20px; /* 20 - 15 = 5px */
+	    	left: 35px; /* 35 - 15 = 5px */
+	    	text-align: left;
 	    }
 	    .slider-container a.slider-nav.next {
 	    	left: auto;
-	    	right: -15px; /* 15 - 10 = 5px */
+	    	right: 10px; /* 15 - 10 = 5px */
+	    	text-align: right;
 	    }
 
 	    .slider-container .slider-nav {
@@ -178,6 +180,31 @@
 		}
 		.slider-container .slider-nav a.direct-nav {
 			position: static;
+		}
+
+		.slider-container .sliderLink {
+			display: block;
+			background-color: rgba(255,255,255,0)
+		}
+		.slider-container .link-prompt {
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			transform: translate(-50%,-50%);
+			font-size: 4rem;
+			z-index: 5;
+			color: white;
+			text-shadow: 1px 1px 4px #000;
+			display: none;
+			opacity: 0.7;
+		}
+		/*.link-prompt i {
+			display: block;
+			clear: both;
+			float: none;
+		}*/
+		.link-prompt i:first-child {
+			margin-right: -0.2em;
 		}
 	    
 		/* mobile only */
@@ -252,6 +279,7 @@
 	<!-- JS -->
 	<script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
 	<script src="jquery-3.1.1.min.js"></script>
+	<script src="jquery.color-2.1.2.min.js"></script>
 	<script src="jquery.touchSwipe.min.js"></script>
 	<script type="text/javascript" src="https://cdn.firetechcamp.com/wp-content/themes/firetechtheme/js/vendor/foundation.min.js"></script>
 	<script>
@@ -393,6 +421,9 @@
 			//console.log(ftc_slider.clickable);
 			$('.slider-container a.slider-nav').click(function(e){
 				e.preventDefault();
+				abortTimer(slideTimer);
+
+				console.log("autoslide paused");
 				if (ftc_slider.clickable == true) {
 					let sliderID = $(this).attr("data-sliderid");
 					let theSlider = $("#" + sliderID + " .slider");
@@ -460,7 +491,7 @@
 			$('.slider-container').swipe({
 				//Generic swipe handler for all directions
         		swipe:function(event, direction, distance, duration, fingerCount, fingerData) {
-        			
+        			abortTimer(slideTimer);
         			if (ftc_slider.clickable == true) {
 
 	        			console.log("Swipe direction:" + direction);
@@ -491,9 +522,63 @@
 
 			}); //end swipe controls
 
-		
+			// animate on hover - clickable hint
+			$('.sliderLink').hover(
+				function(){
+					console.log("mouse in");
+					$( this ).children(".link-prompt").fadeIn( 300 );
+					
+					
+				},
+				function() {  
+					// mouse out
+					console.log("mouse out");
+					$( this ).children(".link-prompt").fadeOut( 300 );
+					
+					
 
+			});
+			$('.slider-container').hover(
+				function(){
+					console.log("mouse in2");
+					
+					
+					abortTimer(slideTimer);
+					slideTimerEnabled = false;
+					console.log("autoslide paused");
+				},
+				function() {  
+					// mouse out
+					console.log("mouse out2");
+					
+					
+					console.log("autoslide resume");
+					
+					slideTimerEnabled = true;
+					let slideTimer = setTimeout(autoSlider.bind(null, "slider_hp_1"), 2000);
+
+			});
+			
+			let slideTimerEnabled = true;
 		// auto slide timer
+			// set interval
+			let slideTimer = setTimeout(autoSlider.bind(null, "slider_hp_1"), 4000);
+			function autoSlider(sliderID = "slider_hp_1") {
+			  // do some stuff...
+			  if (slideTimerEnabled == true) {
+			  	console.log("timer triggered");
+			  	ftc_slider.slideMove(sliderID, "left");
+			  	slideTimer = setTimeout(autoSlider.bind(null, "slider_hp_1"), 4000);
+			  }
+			}
+
+			function abortTimer(theTimer = slideTimer) { // to be called when you want to stop the timer
+			  clearInterval(theTimer);
+			}
+
+			
+
+			
 
 		});
 	</script>
@@ -503,7 +588,7 @@
 
 <div id="wrapper">
 <h1>Carousel/Slider</h1>
-	<h2>Slide 1 - infinite loop sequential slide</h2>
+	<!--<h2>Slide 1 - infinite loop sequential slide</h2>
 	<div id="slider_1234" class="slider-container">
 		<div class="slider">
 			<div class="slide" data-slideid="1" style="background-color: #fc0;">
@@ -516,11 +601,11 @@
 				<h2>Slide 3</h2>
 			</div>
 		</div>
-		<nav class="slider-nav">
-			<a href="#" class="prev" data-sliderid="slider_1234">Prev</a>
-			<a href="#" class="next" data-sliderid="slider_1234">Next</a>
-		</nav>
-	</div>
+		
+			<a href="#" class="slider-nav prev" data-sliderid="slider_1234"><i class="fa fa-chevron-circle-left" aria-hidden="true"></i></a>
+			<a href="#" class="slider-nav next" data-sliderid="slider_1234"><i class="fa fa-chevron-circle-right" aria-hidden="true"></i></a>
+		
+	</div>-->
 	<!--<h2>Slider 3 - direct slide nav</h2>
 	<div id="slider_1235" class="slider-container">
 		<div class="slider">
@@ -574,11 +659,15 @@
 		<li>Supports thumbnail navigation</li>
 		<li>Mobile swipe and touch support</li>
 		<li>Behaves as static hero when only 1 slide</li>
+		<li>roll over icon to indicate link or type of content being linked to</li>
 		<li>General Styling</li>
+		<li>Auto-slider on timer</li>
+		<li>Auto-slider pause on hover or click</li>
+		<li>Full carousel link click</li>
 	</ul>
 	<h3>Features still being worked on</h3>
 	<ul>
-		<li>Auto-slider on timer</li>
+		<li>optional seperate auto-slider per carousel</li>
 		<li>2nd navigation options - direct to specific slide</li>
 		<li>Combined sequential and direct navigation on single slider</li>
 		<li>auto-thumbnail generation for photo slider</li>
@@ -590,76 +679,77 @@
 	
 	<h2>Slider with HTML content</h2>
 	<div id="slider_hp_1"  class="slider-container">
-		<a href="#" class="slider-nav prev" data-sliderid="slider_hp_1"><i class="fa fa-chevron-circle-left" aria-hidden="true"></i></a>
-		<a href="#" class="slider-nav next" data-sliderid="slider_hp_1"><i class="fa fa-chevron-circle-right" aria-hidden="true"></i></a>
+
 		<div class="slider">
 			<div class="slide" data-slideid="1" style="background-color: #ff4c50;">
-                <div class="row">
-                    <div class="text-block medium-6 columns">
-                        <h2><span>Ready_</span><br>
-                        	<span class="title_inset">Set//</span><br>
-                        	<span>Code_</span>
-                        </h2>
-                        <div class="sub-text-block">
-                        	<h1>
-                            	<span>Innovative and creative</span>
-                            	<span>tech camps and courses</span>
-                            	<span>for young people</span>
-                            </h1>
-                        </div>
-                    </div>
-                    <div class="image-block img-bottom-right medium-6 columns">
-                    	
-                        <img src="https://cdn.firetechcamp.com/wp-content/themes/firetechtheme/images-content/hero-cutout.png" alt="header image">
-                        
-                    </div>
-          		</div>
+				<a class="sliderLink" href="http://www.bbc.co.uk/football">
+	                <div class="row">
+	                    <div class="text-block medium-6 columns">
+	                        <h2><span>Ready_</span><br>
+	                        	<span class="title_inset">Set//</span><br>
+	                        	<span>Code_</span>
+	                        </h2>
+	                        <div class="sub-text-block">
+	                        	<h1>
+	                            	<span>Innovative and creative</span>
+	                            	<span>tech camps and courses</span>
+	                            	<span>for young people</span>
+	                            </h1>
+	                        </div>
+	                    </div>
+	                    <div class="image-block img-bottom-right medium-6 columns">
+	                        <img src="https://cdn.firetechcamp.com/wp-content/themes/firetechtheme/images-content/hero-cutout.png" alt="header image">
+	                    </div>
+	          		</div>
+	          		<span class="link-prompt"><i class="fa fa-chevron-right" aria-hidden="true"></i><i class="fa fa-chevron-right" aria-hidden="true"></i></span>
+          		</a>
 	        </div>
 	    
 	    	<div class="slide" data-slideid="2" style="background-color: #fc0;">
-                <div class="row">
-                    <div class="text-block medium-6 columns">
-                        <h2><span>_Shoot</span>
-                        	<span class="title_inset">Retouch//</span>
-                        	<span>Publish_</span>
-                        </h2>
-                        <div class="sub-text-block">
-                        	<h1>
-                            	<span>Innovative and creative</span>
-                            	<span>tech camps and courses</span>
-                            	<span>for young people</span>
-                            </h1>
-                        </div>
-                    </div>
-                    <div class="image-block img-bottom-right medium-6 columns">
-                    	
-                        <img src="img/slide-camera.png" alt="header image">
-                        
-                    </div>
-          		</div>
+	    		<a class="sliderLink" href="https://xkcd.com/">
+	                <div class="row">
+	                    <div class="text-block medium-6 columns">
+	                        <h2><span>_Shoot</span>
+	                        	<span class="title_inset">Retouch//</span>
+	                        	<span>Publish_</span>
+	                        </h2>
+	                        <div class="sub-text-block">
+	                        	<h1>
+	                            	<span>Innovative and creative</span>
+	                            	<span>tech camps and courses</span>
+	                            	<span>for young people</span>
+	                            </h1>
+	                        </div>
+	                    </div>
+	                    <div class="image-block img-bottom-right medium-6 columns">
+	                        <img src="img/slide-camera.png" alt="header image">
+	                    </div>
+	          		</div>
+	          		<span class="link-prompt"><i class="fa fa-play-circle" aria-hidden="true"></i></span>
+	          	</a>
 	        </div>
 	     
 	    	<div class="slide" data-slideid="3" style="background-color: #0cf;">
-                <div class="row">
-                    <div class="text-block medium-6 columns">
-                        <h2><span>Build_</span>
-                        	<span class="title_inset">//Program</span>
-                        	<span>&lt;Battle&gt;</span>
-                        </h2>
-                        <div class="sub-text-block">
-                        	<h1>
-                            	<span>Innovative and creative</span>
-                            	<span>tech camps and courses</span>
-                            	<span>for young people</span>
-                            </h1>
-                        </div>
-                    </div>
-                    <div class="image-block img-bottom-right medium-6 columns">
-                    	
-                        <img src="img/slide-robotics.png" alt="header image">
-                        
-                    </div>
-          		</div>
+	    		<a class="sliderLink" href="http://thecodinglove.com/">
+	                <div class="row">
+	                    <div class="text-block medium-6 columns">
+	                        <h2><span>Build_</span>
+	                        	<span class="title_inset">//Program</span>
+	                        	<span>&lt;Battle&gt;</span>
+	                        </h2>
+	                        <div class="sub-text-block">
+	                        	<h1>
+	                            	<span>Innovative and creative</span>
+	                            	<span>tech camps and courses</span>
+	                            	<span>for young people</span>
+	                            </h1>
+	                        </div>
+	                    </div>
+	                    <div class="image-block img-bottom-right medium-6 columns">
+	                        <img src="img/slide-robotics.png" alt="header image">
+	                    </div>
+	          		</div>
+	          	</a>
 	    	</div>
 
 	    	<div class="slide" data-slideid="4" style="background-color: #0fc;">
@@ -690,6 +780,9 @@
 				<a href="#" class="prev" data-sliderid="slider_hp_1"><i class="fa fa-chevron-circle-left" aria-hidden="true"></i></a>
 				<a href="#" class="next" data-sliderid="slider_hp_1"><i class="fa fa-chevron-circle-right" aria-hidden="true"></i></a>
 		</nav>-->
+		<a href="#" class="slider-nav prev" data-sliderid="slider_hp_1"><i class="fa fa-chevron-circle-left" aria-hidden="true"></i></a>
+		<a href="#" class="slider-nav next" data-sliderid="slider_hp_1"><i class="fa fa-chevron-circle-right" aria-hidden="true"></i></a>
+		
 	</div>
 </div>
 <hr />
