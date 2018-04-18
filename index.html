@@ -30,20 +30,20 @@
 			padding-top: 2rem;
 		}
 
-		.slider-container {
+		.ftc-slider {
 			width: 100%;
 			overflow: hidden;
 			border: 1px solid navy;
 			position: relative;
 		}
-		.slider {
+		.ftc-slider .slider {
 			position: absolute;
 			left: 0;
 			top: 0;
 			width: 4320px;
 			margin: 0;
 		}
-		.slide {
+		.ftc-slider .slide {
 			width: 1440px;
 			float: left;
 			background: #fc0;
@@ -51,7 +51,7 @@
 			position: relative;
 		}
 		
-		.slider-nav {
+		.ftc-slider .slider-nav {
 			display: block;
 			position: absolute;
 			bottom: 20px;
@@ -59,25 +59,25 @@
 			transform:	translateX(-50%);
 			z-index: 10;
 		}
-		.slider-nav a {
+		.ftc-slider .slider-nav a {
 			color: white;
 			font-weight: bold;
 			text-shadow: 1px 1px 2px black;
 		}
 
-		.slider-container, .slider, .slider .slide, .slider .image-block, .slider-container .slider-nav {
+		.ftc-slider, .ftc-slider .slider,.ftc-slider .slider .slide, .ftc-slider .slider .image-block, .ftc-slider .slider-nav {
 			height: 400px;
 		}
-		.slider .image-block img {
+		.ftc-slider .slider .image-block img {
 			max-height: 380px;
 		}
 		
 
 		/* slider content */
-		.slider .text-block {
+		.ftc-slider .slider .text-block {
 			padding: 1rem 0 0 1rem;
     	}
-    	.slider .text-block h2 {
+    	.ftc-slider .slider .text-block h2 {
     		font-size: 2.5rem;
     		font-family: Code-Pro-Bold,Roboto,Helvetica Neue,Helvetica,Arial sans-serif;
 	    	font-weight: 400;
@@ -89,7 +89,7 @@
 	    	z-index: 2;
 	    	max-width: 550px;
     	}
-    	.slider .text-block h2 span {
+    	.ftc-slider .slider .text-block h2 span {
 	    	background-color: #fff;
 	    	display: inline-block;
 	    	margin-bottom: .125em;
@@ -98,23 +98,23 @@
 	    	clear: both;
 	    	float: none;
 	    }
-	    .slider .text-block h2 span.title_inset {
+	    .ftc-slider .slider .text-block h2 span.title_inset {
 	    	margin-left: 9rem;
 	    }
 
-	    .slider .sub-text-block {
+	    .ftc-slider .slider .sub-text-block {
 	    	margin-left: 7rem;
 	    	position: relative;
 	    	z-index: 2;
 	    }
-	    .slider .sub-text-block h1 {
+	    .ftc-slider .slider .sub-text-block h1 {
 	    	font-family: Roboto,Glober,"Lucida Grande",Verdana,sans-serif;
     		font-weight: 600;
     		font-size: 0.75rem;
     		text-align: left;
     		white-space: pre-line;
 	    }
-	    .slider .sub-text-block h1 span {
+	    .ftc-slider .slider .sub-text-block h1 span {
 	    	background-color: #FFDF3F;
 	    	padding: .5em;
 	    	margin-bottom: .25em;
@@ -124,20 +124,20 @@
 	    	
 	    }
 
-	    .slider .image-block {
+	    .ftc-slider .slider .image-block {
 	    	margin: 0;
 	    	padding: 0;
 	    	opacity: 0.5;
 	    }
-	    .slider .image-block img {
+	    .ftc-slider .slider .image-block img {
 	    	max-width: 100%;
 	    }
-	    .slider .image-block.img-bottom-right img {
+	    .ftc-slider .slider .image-block.img-bottom-right img {
 	     	position: absolute;
 	     	bottom: 0;
 	     	right: 0;
 	    }
-	    .slider-container .slider-nav i.fa {
+	    .ftc-slider .slider-nav i.fa {
 		    font-size: 2rem;
 		    opacity: 0.1;
 		    position: absolute;
@@ -145,48 +145,48 @@
 		    transform: translateY(-50%);
 		}
 
-	    .slider-container:hover  .slider-nav i.fa {
+	    .ftc-slider:hover  .slider-nav i.fa {
 	    	opacity: 0.6;
 	    }
 	    
-		.slider-container .slider-nav i.fa:hover {
+		.ftc-slider .slider-nav i.fa:hover {
 			opacity: 1;
 		}
-		.slider-container .slider-nav {
+		.ftc-slider .slider-nav {
 			width: 50px;
 			z-index: 3;
 			display: block;
 		}
 
-	    .slider-container a.slider-nav  {
+	    .ftc-slider a.slider-nav  {
 	    	position: absolute;
 	    	top: 0;
 	    	color: #fff;
 	    }
 
-	    .slider-container a.slider-nav.prev {
+	    .ftc-slider a.slider-nav.prev {
 	    	left: 35px; /* 35 - 15 = 5px */
 	    	text-align: left;
 	    }
-	    .slider-container a.slider-nav.next {
+	    .ftc-slider a.slider-nav.next {
 	    	left: auto;
 	    	right: 10px; /* 15 - 10 = 5px */
 	    	text-align: right;
 	    }
 
-	    .slider-container .slider-nav {
+	    .ftc-slider .slider-nav {
 	    	z-index: -1;
 			display: none;
 		}
-		.slider-container .slider-nav a.direct-nav {
+		.ftc-slider .slider-nav a.direct-nav {
 			position: static;
 		}
 
-		.slider-container .sliderLink {
+		.ftc-slider .sliderLink {
 			display: block;
 			background-color: rgba(255,255,255,0)
 		}
-		.slider-container .link-prompt {
+		.ftc-slider .link-prompt {
 			position: absolute;
 			left: 50%;
 			top: 50%;
@@ -198,18 +198,14 @@
 			display: none;
 			opacity: 0.7;
 		}
-		/*.link-prompt i {
-			display: block;
-			clear: both;
-			float: none;
-		}*/
-		.link-prompt i:first-child {
+		
+		.ftc-slider .link-prompt i:first-child {
 			margin-right: -0.2em;
 		}
 	    
 		/* mobile only */
 		@media screen and (max-width: 450px) {
-			.slider .image-block {
+			.ftc-slider .slider .image-block {
 		    	margin: 0;
 		    	padding: 0;
 		    	position: absolute;
@@ -222,53 +218,53 @@
 
 		/* Tablet and above */
 		@media screen and (min-width: 768px) {
-			.slider-container, .slider, .slider .slide, .slider .image-block, .slider-container .slider-nav {
+			.ftc-slider, .slider, .slider .slide, .slider .image-block, .ftc-slider .slider-nav {
 				height: 300px;
 			}
-			.slider .image-block img {
+			.ftc-slider .slider .image-block img {
 				max-height: 280px;
 			}	
-			.slider .text-block h2 {
+			.ftc-slider .slider .text-block h2 {
     			font-size: 2.4rem;
     		}
-    		.slider .sub-text-block h1 {
+    		.ftc-slider .slider .sub-text-block h1 {
     			font-size: 0.7rem;
     		}
     		
-    		.slider .text-block h2 span {
+    		.ftc-slider .slider .text-block h2 span {
     			padding: 0.2em;
     		}
-    		.slider .image-block {
+    		.ftc-slider .slider .image-block {
     			position: relative;
     			opacity: 1;
     		}
     		
-    		.slider .sub-text-block {
+    		.ftc-slider .slider .sub-text-block {
 	    		margin-left: 8rem;
 	    	}
 		}
 		/* desktop */
 		@media screen and (min-width: 1024px) {
-			.slider-container .slider-nav {
+			.ftc-slider .slider-nav {
 				display: block;
 				z-index: 3;
 			}
-			.slider-container, .slider, .slider .slide, .slider .image-block, .slider-container .slider-nav {
+			.ftc-slider, .slider, .slider .slide, .slider .image-block, .ftc-slider .slider-nav {
 				height: 500px;
 			}
-			.slider .image-block img {
+			.ftc-slider .slider .image-block img {
 				max-height: 480px;
 			}
-			.slider .text-block h2 {
+			.ftc-slider .slider .text-block h2 {
     			font-size: 3.5rem;
     		}
-    		.slider .sub-text-block h1 {
+    		.ftc-slider .slider .sub-text-block h1 {
     			font-size: 1.2rem;
     		}
-    		.slider .text-block {
+    		.ftc-slider .slider .text-block {
 				padding: 2rem 0 0 2rem;
     		}
-    		.slider .sub-text-block {
+    		.ftc-slider .slider .sub-text-block {
 	    		margin-left: 9rem;
 	    	}
 
@@ -279,7 +275,6 @@
 	<!-- JS -->
 	<script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
 	<script src="jquery-3.1.1.min.js"></script>
-	<script src="jquery.color-2.1.2.min.js"></script>
 	<script src="jquery.touchSwipe.min.js"></script>
 	<script type="text/javascript" src="https://cdn.firetechcamp.com/wp-content/themes/firetechtheme/js/vendor/foundation.min.js"></script>
 	<script>
@@ -292,21 +287,26 @@
 			let sliderDetails = eval('ftc_slider.' + sliderID + '.details' );
 			let slideWidth = sliderDetails.slideWidth;
 			let currentOffset = parseInt(theSlider.css("left"));
-			if (currentOffset < 0){ currentOffset = -currentOffset}
+			//failsafe in case of bug that causes to slide on forever
+			currentOffset = -currentOffset;
+			if (currentOffset > theSlider.width()){
+				theSlider.css("left", 0);
+				currentOffset = 0;
+			}
 			let maxOffset = sliderDetails.maxOffset;
 			let slideDirection = "-=";
 			let moveSize = slideWidth * count;
 			let offsetDiff = maxOffset - currentOffset;
-
+			
+			
 
 			ftc_slider.clickable = false;
 			if (direction === "left") {
 				//console.log("left direction");  
-				
 				//console.log("currentOffset: " + currentOffset);
 
 			    if (offsetDiff <= moveSize) {
-			    	console.log("reached the end - moving slides")
+			    	//console.log("reached the end - moving slides")
 			    	for (let i = 0; i < count; i++) {
 			    		let slideToMove = $("#" + sliderID + " .slider .slide:first-child");
 			    		// might need to use .detach for jquery mobile
@@ -320,7 +320,7 @@
 				//console.log("currentOffset: " + currentOffset);
 				if (currentOffset <= moveSize) {
 					for (let i = 0; i < count; i++) {
-						console.log("moving slide order");
+						//console.log("moving slide order");
 						let slideToMove = $("#" + sliderID + " .slider .slide:last-child");
 						slideToMove.prependTo(theSlider);
 						theSlider.css("left", "-=" + slideWidth)
@@ -335,11 +335,11 @@
 			  }, 800, function() {
 			    // Animation complete.
 			    ftc_slider.clickable = true;
-			    $(".slider-container .slider .slide").removeClass("active-slide");
-			    let slidePos = parseInt((currentOffset / slideWidth) + 1);
-					if(slidePos < 2) { slidePos = 2 };
+			    //$(".ftc-slider .slider .slide").removeClass("active-slide");
+			    //let slidePos = parseInt((currentOffset / slideWidth) + 1);
+				//	if(slidePos < 2) { slidePos = 2 };
 				//console.log( "slidePos: " + slidePos );
-			    $(".slider-container .slider .slide:nth-child("+slidePos+")").addClass("active-slide");
+			    //$(".ftc-slider .slider .slide:nth-child("+slidePos+")").addClass("active-slide");
 
 			    //console.log("slide right");
 			    //console.log("post slide currentOffset: " + currentOffset);
@@ -351,7 +351,7 @@
 
 		$( document ).ready(function() {
 			
-			ftc_slider.sliderUnit = $(".slider-container");
+			ftc_slider.sliderUnit = $(".ftc-slider");
 			// loop through the sliders and create details on the ftc_slider object
 			ftc_slider.sliderUnit.each(function(){
 				let sliderunitID = $(this).attr("id");
@@ -376,7 +376,7 @@
 				ftc_slider.clickable = true;
 			}
 
-			$(".slider-container .slider .slide:first-child").addClass("active-slide");
+			$(".ftc-slider .slider .slide:first-child").addClass("active-slide");
 
 			$(window).resize(function(){
 				console.log("resized");
@@ -419,7 +419,7 @@
 				return sliderObj;
 			}
 			//console.log(ftc_slider.clickable);
-			$('.slider-container a.slider-nav').click(function(e){
+			$('.ftc-slider a.slider-nav').click(function(e){
 				e.preventDefault();
 				abortTimer(slideTimer);
 
@@ -454,7 +454,7 @@
 
 						 	//targetSlide2 = Array.from( theSlider.children() ).find( function(mySlides){ mySlides.attr("data-target") == targetSlide } );
 
-						 	//$(".slider-container .slider > .slide").findIndex(return function(x) x.attr("data-target") == targetSlide);
+						 	//$(".ftc-slider .slider > .slide").findIndex(return function(x) x.attr("data-target") == targetSlide);
 							//console.log("targetSlide2: " + targetSlide2);
 						if (targetSlide > currentSlide) {
 							//console.log("Slide Right");
@@ -488,7 +488,7 @@
 
 
 			// touch swipe 
-			$('.slider-container').swipe({
+			$('.ftc-slider').swipe({
 				//Generic swipe handler for all directions
         		swipe:function(event, direction, distance, duration, fingerCount, fingerData) {
         			abortTimer(slideTimer);
@@ -538,7 +538,7 @@
 					
 
 			});
-			$('.slider-container').hover(
+			$('.ftc-slider').hover(
 				function(){
 					console.log("mouse in2");
 					
@@ -566,9 +566,9 @@
 			function autoSlider(sliderID = "slider_hp_1") {
 			  // do some stuff...
 			  if (slideTimerEnabled == true) {
-			  	console.log("timer triggered");
+			  	//console.log("timer triggered");
 			  	ftc_slider.slideMove(sliderID, "left");
-			  	slideTimer = setTimeout(autoSlider.bind(null, "slider_hp_1"), 4000);
+			  	slideTimer = setTimeout(autoSlider.bind(null, "slider_hp_1"), 5000);
 			  }
 			}
 
@@ -582,103 +582,17 @@
 
 		});
 	</script>
+	
 </head>
 <body>
 
 
-<div id="wrapper">
-<h1>Carousel/Slider</h1>
-	<!--<h2>Slide 1 - infinite loop sequential slide</h2>
-	<div id="slider_1234" class="slider-container">
-		<div class="slider">
-			<div class="slide" data-slideid="1" style="background-color: #fc0;">
-				<h2>Slide 1</h2>
-			</div>
-			<div class="slide" data-slideid="2" style="background-color: #0cf;">
-				<h2>Slide 2</h2>
-			</div>
-			<div class="slide" data-slideid="3" style="background-color: #f00;">
-				<h2>Slide 3</h2>
-			</div>
-		</div>
-		
-			<a href="#" class="slider-nav prev" data-sliderid="slider_1234"><i class="fa fa-chevron-circle-left" aria-hidden="true"></i></a>
-			<a href="#" class="slider-nav next" data-sliderid="slider_1234"><i class="fa fa-chevron-circle-right" aria-hidden="true"></i></a>
-		
-	</div>-->
-	<!--<h2>Slider 3 - direct slide nav</h2>
-	<div id="slider_1235" class="slider-container">
-		<div class="slider">
-			<div class="slide" data-slideid="1" style="background-color: #fc0;">
-				<h2>Slide 1</h2>
-			</div>
-			<div class="slide" data-slideid="2" style="background-color: #0cf;">
-				<h2>Slide 2</h2>
-			</div>
-			<div class="slide" data-slideid="3" style="background-color: #f00;">
-				<h2>Slide 3</h2>
-			</div>
-			<div class="slide" data-slideid="4" style="background-color: #ef0;">
-				<h2>Slide 4</h2>
-			</div>
 
-		</div>
-		<nav class="slider-nav">
-			
-			
-			<a href="#" class="direct-nav" data-target="1" data-sliderid="slider_1235">1</a>
-			<a href="#" class="direct-nav" data-target="2" data-sliderid="slider_1235">2</a>
-			<a href="#" class="direct-nav" data-target="3" data-sliderid="slider_1235">3</a>
-			<a href="#" class="direct-nav" data-target="4" data-sliderid="slider_1235">4</a>
-
-			
-		</nav>
-	</div>-->
-	<h2>Slider 2 - single slide only - no sliding</h2>
-	<div id="slider_1236" class="slider-container">
-		<div class="slider">
-			<div class="slide" data-slideid="1" style="background-color: #0cf;">
-				<h2>Only 1 Slide (static hero)</h2>
-			</div>
-		</div>
-		<nav class="slider-nav">
-			<a href="#" class="prev" data-sliderid="slider_1236">Prev</a>
-			<a href="#" class="next" data-sliderid="slider_1236">Next</a>
-		</nav>
-	</div>
-
-	<hr />
-	<h2>Slider features</h2>
-	<ul>
-		<li>Infinite scrolling sequential slides</li>
-		<li>Responsive - Fully responsive. Scales with its container. 
-		 Fits all screensizes and can be used full width or in a column/box</li>
-		
-		<li>Support for multiple sliders on one page</li>
-		<li>Support for any html content including images, video, text, links and combination</li>
-		<li>Supports thumbnail navigation</li>
-		<li>Mobile swipe and touch support</li>
-		<li>Behaves as static hero when only 1 slide</li>
-		<li>roll over icon to indicate link or type of content being linked to</li>
-		<li>General Styling</li>
-		<li>Auto-slider on timer</li>
-		<li>Auto-slider pause on hover or click</li>
-		<li>Full carousel link click</li>
-	</ul>
-	<h3>Features still being worked on</h3>
-	<ul>
-		<li>optional seperate auto-slider per carousel</li>
-		<li>2nd navigation options - direct to specific slide</li>
-		<li>Combined sequential and direct navigation on single slider</li>
-		<li>auto-thumbnail generation for photo slider</li>
-		<li>Futher Refactoring</li>
-	</ul>
-</div>
 <hr />
 <div id="content" class="site-content">
-	
+	<h1>Carousel/Slider</h1>
 	<h2>Slider with HTML content</h2>
-	<div id="slider_hp_1"  class="slider-container">
+	<div id="slider_hp_1"  class="ftc-slider">
 
 		<div class="slider">
 			<div class="slide" data-slideid="1" style="background-color: #ff4c50;">
@@ -752,7 +666,7 @@
 	          	</a>
 	    	</div>
 
-	    	<div class="slide" data-slideid="4" style="background-color: #0fc;">
+	    	<!--<div class="slide" data-slideid="4" style="background-color: #0fc;">
                 <div class="row">
                     <div class="text-block medium-6 columns">
                         <h2><span>Build_</span>
@@ -773,7 +687,7 @@
                         
                     </div>
           		</div>
-	    	</div>
+	    	</div>-->
 
 		</div><!-- // End of slider -->
 		<!--<nav class="slider-nav">
@@ -786,5 +700,94 @@
 	</div>
 </div>
 <hr />
+
+<div id="wrapper">
+<h1>Carousel/Slider</h1>
+	<!--<h2>Slide 1 - infinite loop sequential slide</h2>
+	<div id="slider_1234" class="ftc-slider">
+		<div class="slider">
+			<div class="slide" data-slideid="1" style="background-color: #fc0;">
+				<h2>Slide 1</h2>
+			</div>
+			<div class="slide" data-slideid="2" style="background-color: #0cf;">
+				<h2>Slide 2</h2>
+			</div>
+			<div class="slide" data-slideid="3" style="background-color: #f00;">
+				<h2>Slide 3</h2>
+			</div>
+		</div>
+		
+			<a href="#" class="slider-nav prev" data-sliderid="slider_1234"><i class="fa fa-chevron-circle-left" aria-hidden="true"></i></a>
+			<a href="#" class="slider-nav next" data-sliderid="slider_1234"><i class="fa fa-chevron-circle-right" aria-hidden="true"></i></a>
+		
+	</div>-->
+	<!--<h2>Slider 3 - direct slide nav</h2>
+	<div id="slider_1235" class="ftc-slider">
+		<div class="slider">
+			<div class="slide" data-slideid="1" style="background-color: #fc0;">
+				<h2>Slide 1</h2>
+			</div>
+			<div class="slide" data-slideid="2" style="background-color: #0cf;">
+				<h2>Slide 2</h2>
+			</div>
+			<div class="slide" data-slideid="3" style="background-color: #f00;">
+				<h2>Slide 3</h2>
+			</div>
+			<div class="slide" data-slideid="4" style="background-color: #ef0;">
+				<h2>Slide 4</h2>
+			</div>
+
+		</div>
+		<nav class="slider-nav">
+			
+			
+			<a href="#" class="direct-nav" data-target="1" data-sliderid="slider_1235">1</a>
+			<a href="#" class="direct-nav" data-target="2" data-sliderid="slider_1235">2</a>
+			<a href="#" class="direct-nav" data-target="3" data-sliderid="slider_1235">3</a>
+			<a href="#" class="direct-nav" data-target="4" data-sliderid="slider_1235">4</a>
+
+			
+		</nav>
+	</div>-->
+	<h2>Slider 2 - single slide only - no sliding</h2>
+	<div id="slider_1236" class="ftc-slider">
+		<div class="slider">
+			<div class="slide" data-slideid="1" style="background-color: #0cf;">
+				<h2>Only 1 Slide (static hero)</h2>
+			</div>
+		</div>
+		<nav class="slider-nav">
+			<a href="#" class="prev" data-sliderid="slider_1236">Prev</a>
+			<a href="#" class="next" data-sliderid="slider_1236">Next</a>
+		</nav>
+	</div>
+
+	<hr />
+	<h2>Slider features</h2>
+	<ul>
+		<li>Infinite scrolling sequential slides</li>
+		<li>Responsive - Fully responsive. Scales with its container. 
+		 Fits all screensizes and can be used full width or in a column/box</li>
+		
+		<li>Support for multiple sliders on one page</li>
+		<li>Support for any html content including images, video, text, links and combination</li>
+		<li>Supports thumbnail navigation</li>
+		<li>Mobile swipe and touch support</li>
+		<li>Behaves as static hero when only 1 slide</li>
+		<li>roll over icon to indicate link or type of content being linked to</li>
+		<li>General Styling</li>
+		<li>Auto-slider on timer</li>
+		<li>Auto-slider pause on hover or click</li>
+		<li>Full carousel link click</li>
+	</ul>
+	<h3>Features still being worked on</h3>
+	<ul>
+		<li>optional seperate auto-slider per carousel</li>
+		<li>2nd navigation options - direct to specific slide</li>
+		<li>Combined sequential and direct navigation on single slider</li>
+		<li>auto-thumbnail generation for photo slider</li>
+		<li>Futher Refactoring</li>
+	</ul>
+</div>
 </body>
 </html>
